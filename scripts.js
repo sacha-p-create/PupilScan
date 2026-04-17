@@ -1528,12 +1528,14 @@ async function predictWebcam() {
       document.getElementById("measurementProgress").max = MAX_NUM_DEVIATION_OBSERVATIONS
     }
 
-    // Yellow dots = smoothed detected iris centers
-    drawingUtils.drawLandmarks(
-      [{x: smoothedRtCenter[0], y: smoothedRtCenter[1], z: smoothedRtCenter[2]},
-       {x: smoothedLtCenter[0], y: smoothedLtCenter[1], z: smoothedLtCenter[2]}],
-      { color: "#FFFF00", lineWidth: 1 }
-    )
+   // Yellow dots = smoothed detected iris centers
+    if (smoothedRtCenter && smoothedLtCenter) {
+      drawingUtils.drawLandmarks(
+        [{x: smoothedRtCenter[0], y: smoothedRtCenter[1], z: smoothedRtCenter[2]},
+         {x: smoothedLtCenter[0], y: smoothedLtCenter[1], z: smoothedLtCenter[2]}],
+        { color: "#FFFF00", lineWidth: 1 }
+      )
+    }
 
     // Red dots = predicted neutral positions from barycentric model
     drawingUtils.drawLandmarks(
