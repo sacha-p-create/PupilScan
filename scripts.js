@@ -1556,8 +1556,7 @@ async function predictWebcam() {
       drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_RIGHT_IRIS, { color: "#C0C0C070" })
       drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_IRIS, { color: "#C0C0C070" })
     }
-  }
- // Draw smoothed iris centers on top of everything
+// Draw smoothed iris centers on top of everything
   if (deviationResults.smoothedRt && deviationResults.smoothedLt) {
     const rt = deviationResults.smoothedRt;
     const lt = deviationResults.smoothedLt;
@@ -1570,6 +1569,8 @@ async function predictWebcam() {
     canvasCtx.fillStyle = "#00FF00";
     canvasCtx.fill();
   }
+  }
+ 
   if (webcamRunning === true) {
     window.requestAnimationFrame(predictWebcam)
   }
