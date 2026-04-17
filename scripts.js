@@ -1262,10 +1262,12 @@ function calculateDeviation(landmarks) {
 
   const valid = Math.abs(yawRt) < 10 || Math.abs(yawLt) < 10;
 
-  return {
+ return {
     deviationPD: valid ? degreesToPD(yawRt - yawLt) : NaN,
     predictedRt: reverseAlignment([predRt], R, s, t)[0],
-    predictedLt: reverseAlignment([predLt], R, s, t)[0]
+    predictedLt: reverseAlignment([predLt], R, s, t)[0],
+    smoothedRt: smoothedRtCenter,
+    smoothedLt: smoothedLtCenter
   };
 }
 
@@ -1529,13 +1531,13 @@ async function predictWebcam() {
     }
 
    // Yellow dots = smoothed detected iris centers
-    if (smoothedRtCenter && smoothedLtCenter) {
-      drawingUtils.drawLandmarks(
-        [{x: smoothedRtCenter[0], y: smoothedRtCenter[1], z: smoothedRtCenter[2]},
-         {x: smoothedLtCenter[0], y: smoothedLtCenter[1], z: smoothedLtCenter[2]}],
-        { color: "#FFFF00", lineWidth: 1 }
-      )
-    }
+    if (deviationResults.smoothedRt && deviationResults.smoothedLt) {
+  drawingUtils.drawLandmarks(
+    [{x: deviationResults.smoothedRt[0], y: deviationResults.smoothedRt[1], z: deviationResults.smoothedRt[2]},
+     {x: deviationResults.smoothedLt[0], y: deviationResults.smoothedLt[1], z: deviationResults.smoothedLt[2]}],
+    { color: "#FFFF00", lineWidth: 1 }
+  )
+}
 
     // Red dots = predicted neutral positions from barycentric model
     drawingUtils.drawLandmarks(
