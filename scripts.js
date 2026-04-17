@@ -1540,6 +1540,19 @@ if (deviationResults.smoothedRt && deviationResults.smoothedLt) {
     { color: "#00FF00", lineWidth: 3, radius: 8 }
   )
 }
+// Debug: draw directly on canvas
+if (deviationResults.smoothedRt && deviationResults.smoothedLt) {
+  const rt = deviationResults.smoothedRt;
+  const lt = deviationResults.smoothedLt;
+  canvasCtx.beginPath();
+  canvasCtx.arc(rt[0] * canvasElement.width, rt[1] * canvasElement.height, 10, 0, 2 * Math.PI);
+  canvasCtx.fillStyle = "#00FF00";
+  canvasCtx.fill();
+  canvasCtx.beginPath();
+  canvasCtx.arc(lt[0] * canvasElement.width, lt[1] * canvasElement.height, 10, 0, 2 * Math.PI);
+  canvasCtx.fillStyle = "#00FF00";
+  canvasCtx.fill();
+}
     // Red dots = predicted neutral positions from barycentric model
     drawingUtils.drawLandmarks(
       [{
