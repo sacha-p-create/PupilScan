@@ -1532,14 +1532,14 @@ async function predictWebcam() {
     }
 
    // Yellow dots = smoothed detected iris centers
-    if (deviationResults.smoothedRt && deviationResults.smoothedLt) {
+if (deviationResults.smoothedRt && deviationResults.smoothedLt) {
+  const fakeRt = { x: deviationResults.smoothedRt[0], y: deviationResults.smoothedRt[1], z: deviationResults.smoothedRt[2], visibility: 1 };
+  const fakeLt = { x: deviationResults.smoothedLt[0], y: deviationResults.smoothedLt[1], z: deviationResults.smoothedLt[2], visibility: 1 };
   drawingUtils.drawLandmarks(
-    [{x: deviationResults.smoothedRt[0], y: deviationResults.smoothedRt[1], z: deviationResults.smoothedRt[2]},
-     {x: deviationResults.smoothedLt[0], y: deviationResults.smoothedLt[1], z: deviationResults.smoothedLt[2]}],
-    { color: "#FFFF00", lineWidth: 1 }
+    [fakeRt, fakeLt],
+    { color: "#00FF00", lineWidth: 3, radius: 8 }
   )
 }
-
     // Red dots = predicted neutral positions from barycentric model
     drawingUtils.drawLandmarks(
       [{
