@@ -1251,6 +1251,8 @@ function calculateDeviation(landmarks) {
     vecSub(normalized[MP_LT_IRIS_MED], normalized[MP_LT_IRIS_LAT])
   );
   const maxIrisDiameter = Math.max(rtIrisDiameter, ltIrisDiameter);
+  console.log("maxIrisDiameter:", maxIrisDiameter, "rtDiam:", rtIrisDiameter, "ltDiam:",        	ltIrisDiameter);
+
 
   // Offset = how far the smoothed iris center is from the predicted
   // neutral position, normalized by iris diameter.
