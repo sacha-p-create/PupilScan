@@ -1251,7 +1251,6 @@ function calculateDeviation(landmarks) {
     vecSub(normalized[MP_LT_IRIS_MED], normalized[MP_LT_IRIS_LAT])
   );
   const maxIrisDiameter = Math.max(rtIrisDiameter, ltIrisDiameter);
-  console.log("maxIrisDiameter:", maxIrisDiameter, "rtDiam:", rtIrisDiameter, "ltDiam:",        	ltIrisDiameter);
 
 
   // Offset = how far the smoothed iris center is from the predicted
@@ -1262,8 +1261,8 @@ function calculateDeviation(landmarks) {
   const yawRt = Math.atan(yawRtOffset) * 180 / Math.PI;
   const yawLt = Math.atan(yawLtOffset) * 180 / Math.PI;
 
-  const valid = Math.abs(yawRt) < 10 || Math.abs(yawLt) < 10;
-console.log("yawRt:", yawRt, "yawLt:", yawLt, "valid:", valid, "deviationPD:", valid ? degreesToPD(yawRt - yawLt) : NaN);
+  const valid = Math.abs(yawRt) < 20 || Math.abs(yawLt) < 20;
+
  return {
     deviationPD: valid ? degreesToPD(yawRt - yawLt) : NaN,
     predictedRt: reverseAlignment([predRt], R, s, t)[0],
