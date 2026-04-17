@@ -1531,28 +1531,7 @@ async function predictWebcam() {
       document.getElementById("measurementProgress").max = MAX_NUM_DEVIATION_OBSERVATIONS
     }
 
-   // Yellow dots = smoothed detected iris centers
-if (deviationResults.smoothedRt && deviationResults.smoothedLt) {
-  const fakeRt = { x: deviationResults.smoothedRt[0], y: deviationResults.smoothedRt[1], z: deviationResults.smoothedRt[2], visibility: 1 };
-  const fakeLt = { x: deviationResults.smoothedLt[0], y: deviationResults.smoothedLt[1], z: deviationResults.smoothedLt[2], visibility: 1 };
-  drawingUtils.drawLandmarks(
-    [fakeRt, fakeLt],
-    { color: "#00FF00", lineWidth: 3, radius: 8 }
-  )
-}
-// Debug: draw directly on canvas
-if (deviationResults.smoothedRt && deviationResults.smoothedLt) {
-  const rt = deviationResults.smoothedRt;
-  const lt = deviationResults.smoothedLt;
-  canvasCtx.beginPath();
-  canvasCtx.arc(rt[0] * canvasElement.width, rt[1] * canvasElement.height, 10, 0, 2 * Math.PI);
-  canvasCtx.fillStyle = "#00FF00";
-  canvasCtx.fill();
-  canvasCtx.beginPath();
-  canvasCtx.arc(lt[0] * canvasElement.width, lt[1] * canvasElement.height, 10, 0, 2 * Math.PI);
-  canvasCtx.fillStyle = "#00FF00";
-  canvasCtx.fill();
-}
+
     // Red dots = predicted neutral positions from barycentric model
     drawingUtils.drawLandmarks(
       [{
@@ -1578,7 +1557,19 @@ if (deviationResults.smoothedRt && deviationResults.smoothedLt) {
       drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_IRIS, { color: "#C0C0C070" })
     }
   }
-
+ // Draw smoothed iris centers on top of everything
+  if (deviationResults.smoothedRt && deviationResults.smoothedLt) {
+    const rt = deviationResults.smoothedRt;
+    const lt = deviationResults.smoothedLt;
+    canvasCtx.beginPath();
+    canvasCtx.arc(rt[0] * canvasElement.width, rt[1] * canvasElement.height, 10, 0, 2 * Math.PI);
+    canvasCtx.fillStyle = "#00FF00";
+    canvasCtx.fill();
+    canvasCtx.beginPath();
+    canvasCtx.arc(lt[0] * canvasElement.width, lt[1] * canvasElement.height, 10, 0, 2 * Math.PI);
+    canvasCtx.fillStyle = "#00FF00";
+    canvasCtx.fill();
+  }
   if (webcamRunning === true) {
     window.requestAnimationFrame(predictWebcam)
   }
