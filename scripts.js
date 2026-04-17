@@ -1263,7 +1263,7 @@ function calculateDeviation(landmarks) {
   const yawLt = Math.atan(yawLtOffset) * 180 / Math.PI;
 
   const valid = Math.abs(yawRt) < 10 || Math.abs(yawLt) < 10;
-
+console.log("yawRt:", yawRt, "yawLt:", yawLt, "valid:", valid, "deviationPD:", valid ? degreesToPD(yawRt - yawLt) : NaN);
  return {
     deviationPD: valid ? degreesToPD(yawRt - yawLt) : NaN,
     predictedRt: reverseAlignment([predRt], R, s, t)[0],
