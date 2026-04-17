@@ -1590,5 +1590,83 @@ function drawBlendShapes(el, blendShapes) {
   el.innerHTML = htmlMaker
 }
 
+// ===========================================================
+// =========== IMAGE UPLOAD ANALYSIS ========================
+// ===========================================================
+
+const imageUpload = document.getElementById("imageUpload");
+const uploadedImage = document.getElementById("uploadedImage");
+const imageOutputCanvas = document.getElementById("image_output_canvas");
+const imageReadout = document.getElementById("imageReadout");
+const imageCanvasCtx = imageOutputCanvas.getContext("2d");
+
+imageUpload.addEventListener("change", async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  // Load image into <img> element
+  const url = URL.createObjectURL(file);
+  uploadedImage.src = url;
+  uploadedImage.style.display = "block";
+
+  uploadedImage.onload = async () => {
+    // Size canvas to match image
+    imageOutputCanvas.width = uploadedImage.naturalWidth;
+    imageOutputCanvas.height = uploadedImage.naturalHeight;
+    imageOutputCanvas.style.width = uploadedImage.offsetWidth + "px";
+    imageOutputCanvas.style.height = uploadedImage.offsetHeight + "px";
+
+    // Run face landmarker in IMAGE mode
+    await faceLandmarker.setOptions({ runningMode: "IMAGE" });
+    const imageResults = faceLandmarker.detect(uploadedImage);
+
+    if (!imageResults.faceLandmarks || !imageResults.faceLandmarks[0]) {
+      imageReadout.innerHTML = "No face detected in image.";
+      return;
+    }
+
+    const landmarks = imageResults.faceLandmarks[0];
+    const deviationResults = calculateDeviation(landmarks);
+
+    if (Number.isNaN(deviationResults.deviationPD)) {
+      imageReadout.innerHTML = "Could not calculate deviation — eye deviation may be too large or face angle too extreme.";
+    } else {
+      const pd = (deviationResults.deviationPD * PREDICTED_DEVIATION_SCALE_FACTOR).toFixed(2);
+      imageReadout.innerHTML = "<b>Deviation: " + pd + " PD</b>";
+    }
+
+    // Draw mesh overlay
+    const drawUtils = new DrawingUtils(imageCanvasCtx);
+    drawUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_RIGHT_EYE, { color: "#C0C0C070" })
+    drawUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_EYE, { color: "#C0C0C070" })
+    drawUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_RIGHT_IRIS, { color: "#C0C0C070" })
+    drawUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_IRIS, { color: "#C0C0C070" })
+
+    // Draw predicted neutral positions (red)
+    drawUtils.drawLandmarks(
+      [{ x: deviationResults.predictedRt[0], y: deviationResults.predictedRt[1], z: deviationResults.predictedRt[2], visibility: 1 },
+       { x: deviationResults.predictedLt[0], y: deviationResults.predictedLt[1], z: deviationResults.predictedLt[2], visibility: 1 }],
+      { color: "#FF0000", lineWidth: 1 }
+    )
+
+    // Draw detected iris centers (green) directly on canvas
+    if (deviationResults.smoothedRt && deviationResults.smoothedLt) {
+      const rt = deviationResults.smoothedRt;
+      const lt = deviationResults.smoothedLt;
+      imageCanvasCtx.beginPath();
+      imageCanvasCtx.arc(rt[0] * imageOutputCanvas.width, rt[1] * imageOutputCanvas.height, 10, 0, 2 * Math.PI);
+      imageCanvasCtx.fillStyle = "#00FF00";
+      imageCanvasCtx.fill();
+      imageCanvasCtx.beginPath();
+      imageCanvasCtx.arc(lt[0] * imageOutputCanvas.width, lt[1] * imageOutputCanvas.height, 10, 0, 2 * Math.PI);
+      imageCanvasCtx.fillStyle = "#00FF00";
+      imageCanvasCtx.fill();
+    }
+
+    // Reset back to VIDEO mode for webcam
+    await faceLandmarker.setOptions({ runningMode: "VIDEO" });
+  };
+});
+
 console.log("===== loaded drawing annotation code successfully =====")
 console.log("===== loaded all code successfully =====")
