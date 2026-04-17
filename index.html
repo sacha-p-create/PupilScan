@@ -1,0 +1,59 @@
+<!-- Copyright 2026 Rahul Dhodapkar.
+
+Adapted from content released by The MediaPipe Authors under
+the Apache License, Version 2.0.
+
+Now released under GNU GPL v3 (LICENSE) in accordance with
+the license file included in this directory.
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. -->
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Cache-control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>StrabScan</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="scripts.js" type="module"></script>
+  <link href="styles.css" rel="stylesheet">
+
+</head>
+<body>
+  <!-- <h1>Face landmark detection using the MediaPipe FaceLandmarker</h1> -->
+
+  <section id="demos" class="invisible">
+    <h2>StrabScan</h2>
+    <p>Real-time measurement of manifest horizontal deviation. </br>Click <b>enable webcam</b> below and grant access to the webcam if prompted.</p>
+    <span id="readout"></span>
+    <progress id="measurementProgress" value="0" max="500"></progress>
+    <div id="liveView" class="videoView">
+      <button id="webcamButton" class="mdc-button mdc-button--raised">
+        <span class="mdc-button__ripple"></span>
+        <span class="mdc-button__label">ENABLE WEBCAM</span>
+      </button>
+      <!-- <button id="switchCamera">Switch Camera</button> -->
+      <button id="toggleLight">TOGGLE LIGHT</button>
+      <button id="toggleOverlay">TOGGLE OVERLAY</button>
+      <br />
+      <label>
+        Zoom:
+        <input type="range" min="0" max="2" id="zoomInput" value="0">
+      </label>
+      <div style="position: relative;">
+        <video id="webcam" style="position: abso" autoplay playsinline></video>
+        <canvas id="video_freeze_canvas" style="position: absolute; left: 0px; top: 0px;"></canvas>
+        <canvas class="output_canvas" id="output_canvas" style="position: absolute; left: 0px; top: 0px;"></canvas>
+      </div>
+    </div>
+    <div class="blend-shapes">
+      <ul class="blend-shapes-list" id="video-blend-shapes"></ul>
+    </div>
+  </section>
+</body>
+</html>
